@@ -14,7 +14,7 @@ use openlst_driver::{
 };
 use south_common::{
     beacons::LSTBeacon,
-    chell::{Beacon, BeaconOperationError, ChellDefinition},
+    chell::{beacon::{Beacon, BeaconOperationError}, ChellDefinition},
     definitions::telemetry::lst as tm,
     obdh::OnTMFunc,
     types::LSTCommand,
@@ -40,7 +40,7 @@ impl OnTMFunc for BeaconIngress {
             if let Err(e) = beacon.lock().await.insert_slice(def, envelope.frame.data()) {
                 match e {
                     BeaconOperationError::DefNotInBeacon => (),
-                    BeaconOperationError::OutOfMemory => {
+                    BeaconOperationError::OutOfBytes => {
                         error!("received incomplete value: {}", def.address());
                     }
                 }
